@@ -1,3 +1,8 @@
+# SPLITT 1.2.1 
+
+* Updated posterior quantile test scripts for newest version of POUMM R-package. 
+* Ready for CRAN (passed check without errors/warnings/notes).
+
 # SPLITT 1.2 available on github
 
 * All code and documentation of SPLITT is now available from 

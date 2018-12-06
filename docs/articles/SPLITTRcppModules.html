@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">SPLITT</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
       </span>
     </div>
 
@@ -682,19 +682,19 @@ Skipped:  0</code></pre>
 ## Number of threads: 8 
 ## Measuring calculation times...</code></pre>
 <pre><code>##    model                                            mode time.ms
-## 1    PMM                                      R (serial)   1.760
-## 2    PMM                                      C++ (AUTO)   0.017
-## 3    PMM              C++ (SINGLE_THREAD_LOOP_POSTORDER)   0.018
-## 4    PMM                 C++ (SINGLE_THREAD_LOOP_PRUNES)   0.017
-## 5    PMM                 C++ (SINGLE_THREAD_LOOP_VISITS)   0.017
-## 6    PMM                  C++ (MULTI_THREAD_LOOP_PRUNES)   0.319
-## 7    PMM                  C++ (MULTI_THREAD_LOOP_VISITS)   0.202
-## 8    PMM C++ (MULTI_THREAD_LOOP_VISITS_THEN_LOOP_PRUNES)   0.776
-## 9    PMM                  C++ (MULTI_THREAD_VISIT_QUEUE)   1.712
-## 10   PMM     C++ (MULTI_THREAD_LOOP_PRUNES_NO_EXCEPTION)   0.055
-## 11   PMM                        C++ (HYBRID_LOOP_PRUNES)   0.048
-## 12   PMM                        C++ (HYBRID_LOOP_VISITS)   0.069
-## 13   PMM       C++ (HYBRID_LOOP_VISITS_THEN_LOOP_PRUNES)   0.068</code></pre>
+## 1    PMM                                      R (serial)   1.790
+## 2    PMM                                      C++ (AUTO)   0.020
+## 3    PMM              C++ (SINGLE_THREAD_LOOP_POSTORDER)   0.021
+## 4    PMM                 C++ (SINGLE_THREAD_LOOP_PRUNES)   0.018
+## 5    PMM                 C++ (SINGLE_THREAD_LOOP_VISITS)   0.020
+## 6    PMM                  C++ (MULTI_THREAD_LOOP_PRUNES)   0.230
+## 7    PMM                  C++ (MULTI_THREAD_LOOP_VISITS)   0.151
+## 8    PMM C++ (MULTI_THREAD_LOOP_VISITS_THEN_LOOP_PRUNES)   0.118
+## 9    PMM                  C++ (MULTI_THREAD_VISIT_QUEUE)   2.068
+## 10   PMM     C++ (MULTI_THREAD_LOOP_PRUNES_NO_EXCEPTION)   0.115
+## 11   PMM                        C++ (HYBRID_LOOP_PRUNES)   0.103
+## 12   PMM                        C++ (HYBRID_LOOP_VISITS)   0.109
+## 13   PMM       C++ (HYBRID_LOOP_VISITS_THEN_LOOP_PRUNES)   0.060</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># with a bigger tree</span>
 <span class="kw"><a href="http://www.rdocumentation.org/packages/PMMUsingSPLITT/topics/MiniBenchmark">MiniBenchmark</a></span>(<span class="dt">N=</span><span class="dv">1000</span>, <span class="dt">Ntests =</span> <span class="dv">100</span>)</code></pre></div>
 <pre><code>## Performing a mini-benchmark of the PMM log-likelihood calculation with 
@@ -705,19 +705,19 @@ Skipped:  0</code></pre>
 ## Number of threads: 8 
 ## Measuring calculation times...</code></pre>
 <pre><code>##    model                                            mode time.ms
-## 1    PMM                                      R (serial)   13.00
-## 2    PMM                                      C++ (AUTO)    0.10
-## 3    PMM              C++ (SINGLE_THREAD_LOOP_POSTORDER)    0.07
-## 4    PMM                 C++ (SINGLE_THREAD_LOOP_PRUNES)    0.06
-## 5    PMM                 C++ (SINGLE_THREAD_LOOP_VISITS)    0.09
-## 6    PMM                  C++ (MULTI_THREAD_LOOP_PRUNES)    0.09
-## 7    PMM                  C++ (MULTI_THREAD_LOOP_VISITS)    0.08
-## 8    PMM C++ (MULTI_THREAD_LOOP_VISITS_THEN_LOOP_PRUNES)    0.28
-## 9    PMM                  C++ (MULTI_THREAD_VISIT_QUEUE)   15.44
-## 10   PMM     C++ (MULTI_THREAD_LOOP_PRUNES_NO_EXCEPTION)    0.11
-## 11   PMM                        C++ (HYBRID_LOOP_PRUNES)    0.08
-## 12   PMM                        C++ (HYBRID_LOOP_VISITS)    0.08
-## 13   PMM       C++ (HYBRID_LOOP_VISITS_THEN_LOOP_PRUNES)    0.13</code></pre>
+## 1    PMM                                      R (serial)   12.40
+## 2    PMM                                      C++ (AUTO)    0.07
+## 3    PMM              C++ (SINGLE_THREAD_LOOP_POSTORDER)    0.08
+## 4    PMM                 C++ (SINGLE_THREAD_LOOP_PRUNES)    0.08
+## 5    PMM                 C++ (SINGLE_THREAD_LOOP_VISITS)    0.08
+## 6    PMM                  C++ (MULTI_THREAD_LOOP_PRUNES)    0.08
+## 7    PMM                  C++ (MULTI_THREAD_LOOP_VISITS)    0.14
+## 8    PMM C++ (MULTI_THREAD_LOOP_VISITS_THEN_LOOP_PRUNES)    0.27
+## 9    PMM                  C++ (MULTI_THREAD_VISIT_QUEUE)   19.53
+## 10   PMM     C++ (MULTI_THREAD_LOOP_PRUNES_NO_EXCEPTION)    0.16
+## 11   PMM                        C++ (HYBRID_LOOP_PRUNES)    0.15
+## 12   PMM                        C++ (HYBRID_LOOP_VISITS)    0.12
+## 13   PMM       C++ (HYBRID_LOOP_VISITS_THEN_LOOP_PRUNES)    0.35</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># with a very big tree</span>
 <span class="kw"><a href="http://www.rdocumentation.org/packages/PMMUsingSPLITT/topics/MiniBenchmark">MiniBenchmark</a></span>(<span class="dt">N=</span><span class="dv">10000</span>, <span class="dt">Ntests =</span> <span class="dv">10</span>)</code></pre></div>
 <pre><code>## Performing a mini-benchmark of the PMM log-likelihood calculation with 
@@ -728,19 +728,19 @@ Skipped:  0</code></pre>
 ## Number of threads: 8 
 ## Measuring calculation times...</code></pre>
 <pre><code>##    model                                            mode time.ms
-## 1    PMM                                      R (serial)   173.0
-## 2    PMM                                      C++ (AUTO)     0.4
-## 3    PMM              C++ (SINGLE_THREAD_LOOP_POSTORDER)     1.1
-## 4    PMM                 C++ (SINGLE_THREAD_LOOP_PRUNES)     1.1
-## 5    PMM                 C++ (SINGLE_THREAD_LOOP_VISITS)     1.3
+## 1    PMM                                      R (serial)   187.0
+## 2    PMM                                      C++ (AUTO)     0.9
+## 3    PMM              C++ (SINGLE_THREAD_LOOP_POSTORDER)     1.2
+## 4    PMM                 C++ (SINGLE_THREAD_LOOP_PRUNES)     1.2
+## 5    PMM                 C++ (SINGLE_THREAD_LOOP_VISITS)     1.2
 ## 6    PMM                  C++ (MULTI_THREAD_LOOP_PRUNES)     0.3
-## 7    PMM                  C++ (MULTI_THREAD_LOOP_VISITS)     0.2
-## 8    PMM C++ (MULTI_THREAD_LOOP_VISITS_THEN_LOOP_PRUNES)     0.5
-## 9    PMM                  C++ (MULTI_THREAD_VISIT_QUEUE)   153.7
-## 10   PMM     C++ (MULTI_THREAD_LOOP_PRUNES_NO_EXCEPTION)     1.4
-## 11   PMM                        C++ (HYBRID_LOOP_PRUNES)     1.8
-## 12   PMM                        C++ (HYBRID_LOOP_VISITS)     1.4
-## 13   PMM       C++ (HYBRID_LOOP_VISITS_THEN_LOOP_PRUNES)     1.4</code></pre>
+## 7    PMM                  C++ (MULTI_THREAD_LOOP_VISITS)     1.3
+## 8    PMM C++ (MULTI_THREAD_LOOP_VISITS_THEN_LOOP_PRUNES)     0.4
+## 9    PMM                  C++ (MULTI_THREAD_VISIT_QUEUE)   191.0
+## 10   PMM     C++ (MULTI_THREAD_LOOP_PRUNES_NO_EXCEPTION)     0.3
+## 11   PMM                        C++ (HYBRID_LOOP_PRUNES)     0.2
+## 12   PMM                        C++ (HYBRID_LOOP_VISITS)     0.3
+## 13   PMM       C++ (HYBRID_LOOP_VISITS_THEN_LOOP_PRUNES)     0.8</code></pre>
 </div>
 <div id="checking-for-code-and-documentation-inconsistencies-before-release-to-cran" class="section level1">
 <h1 class="hasAnchor">

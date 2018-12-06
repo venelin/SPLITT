@@ -74,7 +74,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">SPLITT</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
       </span>
     </div>
 
@@ -165,6 +165,11 @@
       <td><p>a character string denoting the name of a TraversalSpecification 
 class to be implemented in the package.</p></td>
     </tr>
+    <tr>
+      <th>overwrite</th>
+      <td><p>logical indicating if an existing directory `packageName` at
+path should be overwritten (default FALSE).</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -174,7 +179,7 @@ class to be implemented in the package.</p></td>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>This function needs Internet connection to clone the 
-https://github.com/venelin/PMMUsingSPLITT.git repository in <code>path</code>. 
+<a href='https://github.com/venelin/PMMUsingSPLITT.git'>https://github.com/venelin/PMMUsingSPLITT.git</a> repository in <code>path</code>. 
 Then, it replaces the name of the package and the the C++ namespace 
 <code>PMMUsingSPLITT</code> with <code>packageName</code> and the name of the class 
 <code>AbcPMM</code> with <code>className</code>. All these arguments must
