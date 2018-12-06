@@ -110,7 +110,8 @@
 //' \item{\link[=SPLITT::ThreadExceptionHandler]{ThreadExceptionHandler}}{}
 //' }
 //' 
-//' [[Rcpp::export]]
+//' // to enable generation of man-pages use Rcpp::export below (no spaces between :'s).
+//' [[Rcpp : : export]]
 namespace SPLITT{
 
 

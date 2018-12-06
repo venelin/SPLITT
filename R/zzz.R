@@ -24,4 +24,15 @@
 
 # loading the RCPP C++ modules
 
+
+#' Rcpp module for the \code{OrderedTreeStringNodes}-class
+#' @name SPLITT__OrderedTreeStringNodes
+#' @aliases Rcpp_SPLITT__OrderedTreeStringNodes-class
+NULL
+
+#' Class \code{TreeStringNodes}
+#' @name SPLITT__TreeStringNodes
+#' @aliases Rcpp_SPLITT__TreeStringNodes-class
+NULL
+
 loadModule("SPLITT__OrderedTreeStringNodes", TRUE)

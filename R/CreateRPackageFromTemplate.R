@@ -27,8 +27,10 @@
 #' @param path a character string denoting a directory where to hold the package.
 #' @param class a character string denoting the name of a TraversalSpecification 
 #' class to be implemented in the package. 
+#' @param overwrite logical indicating if an existing directory `packageName` at
+#'  path should be overwritten (default FALSE).
 #' @details This function needs Internet connection to clone the 
-#' \link{https://github.com/venelin/PMMUsingSPLITT.git} repository in \code{path}. 
+#' \url{https://github.com/venelin/PMMUsingSPLITT.git} repository in \code{path}. 
 #' Then, it replaces the name of the package and the the C++ namespace 
 #' \code{PMMUsingSPLITT} with \code{packageName} and the name of the class 
 #' \code{AbcPMM} with \code{className}. All these arguments must

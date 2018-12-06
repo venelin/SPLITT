@@ -73,3 +73,5 @@
 # and the openmp shared library binaries in its distribution (see above comments).
 PKG_CPPFLAGS=$(SHLIB_OPENMP_CXXFLAGS)
 PKG_LIBS=$(SHLIB_OPENMP_CFLAGS)
+
+CXX_STD = CXX11

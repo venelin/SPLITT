@@ -43,7 +43,7 @@ specPOUMM <- POUMM::specifyPOUMM_ATSSeG0(
   
   parInitMCMC = function(chainNo, fitML = NULL) {
     if(!is.null(fitML)) {
-      parML <- c(fitML$par[c('alpha', 'theta', 'sigma', 'sigmae', 'g0')])
+      parML <- c(fitML$par)
       names(parML) <- c('alpha', 'theta', 'sigma', 'sigmae', 'g0')
     } else {
       parML <- NULL
@@ -78,7 +78,7 @@ specOU <- POUMM::specifyPOUMM_ATSG0(
   
   parInitMCMC = function(chainNo, fitML = NULL) {
     if(!is.null(fitML)) {
-      parML <- c(fitML$par[c('alpha', 'theta', 'sigma', 'g0')])
+      parML <- c(fitML$par)
       names(parML) <- c('alpha', 'theta', 'sigma', 'g0')
     } else {
       parML <- NULL
@@ -113,6 +113,7 @@ specPMM <- POUMM::specifyPMM_SSeG0(
   parInitMCMC = function(chainNo, fitML = NULL) {
     if(!is.null(fitML)) {
       parML <- fitML$par
+      names(parML) <- c('sigma', 'sigmae', 'g0')
     } else {
       parML <- NULL
     }
@@ -179,22 +180,9 @@ replication <- function(p) {
   
   pruneInfo <- pruneTree(tree, z)
   
-  print(microbenchmark::microbenchmark(
-    "POUMM: C++, Armadillo" = {
-      likPOUMMGivenTreeVTipsC(integrator = pruneInfo$integrator,
-                               parTrueFull["alpha"], parTrueFull["theta"], parTrueFull["sigma"], 
-                               parTrueFull["sigmae"], g0 = parTrueFull["g0"], 
-                               g0Prior = list(mean=0, var = 4))
-      },
-    "POUMM: C++, omp" = {
-      likPOUMMGivenTreeVTipsC4(integrator = pruneInfo$integrator,
-        parTrueFull["alpha"], parTrueFull["theta"], parTrueFull["sigma"], 
-        parTrueFull["sigmae"], g0 = parTrueFull["g0"], 
-        g0Prior = list(mean=0, var = 4))
-    }))
-  
   cat("Fitting POUMM on z ...\n")
   fitPOUMM <- POUMM(z[1:N], tree, spec = c(specPOUMM), verbose = TRUE)
+  save(fitPOUMM, file="fitPOUMM.RData")
   summaryShortPOUMM <- summary(fitPOUMM, mode = "short",
                                startMCMC = specPOUMM$nSamplesMCMC / 2)
   summaryLongPOUMM <- summary(fitPOUMM, mode = "long",
@@ -301,7 +289,7 @@ replication <- function(p) {
       sum(sample < parTrueFull[name]) / length(sample)
   }
   
-  list(id = id, parTrueFull = parTrueFull, H2eTrue = H2eTrue,
+  list(id = p$id, parTrueFull = parTrueFull, H2eTrue = H2eTrue,
        logLikAtTrueParam = logLikAtTrueParam, 
        g = g, z = z,
        summaryShortPOUMM = summaryShortPOUMM, summaryExpertPOUMM = summaryExpertPOUMM,
