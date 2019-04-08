@@ -1,4 +1,29 @@
 
+<!--
+# README.Rmd
+# SPLITT
+# 
+# Copyright 2017-2019 Venelin Mitov
+# 
+# This file is part of SPLITT: a generic C++ library for Serial and Parallel
+# Lineage Traversal of Trees.
+# 
+# SPLITT is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as
+# published by the Free Software Foundation, either version 3 of
+# the License, or (at your option) any later version.
+# 
+# SPLITT is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+# 
+# You should have received a copy of the GNU Lesser General Public
+# License along with SPLITT.  If not, see
+# <http://www.gnu.org/licenses/>.
+# 
+# @author Venelin Mitov
+-->
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 [![Travis build status](https://travis-ci.org/venelin/SPLITT.svg?branch=master)](https://travis-ci.org/venelin/SPLITT) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/SPLITT?color=blue)](http://cran.rstudio.com/package=SPLITT) [![Downloads](http://cranlogs.r-pkg.org/badges/SPLITT?color=blue)](http://cran.rstudio.com/package=SPLITT) [![DOI](https://zenodo.org/badge/159803456.svg)](https://zenodo.org/badge/latestdoi/159803456)
 

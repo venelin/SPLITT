@@ -2,7 +2,7 @@
  *  SPLITT.h
  *  SPLITT
  *
- * Copyright 2017 Venelin Mitov
+ * Copyright 2017-2019 Venelin Mitov
  *
  * This file is part of SPLITT: a generic C++ library for Serial and Parallel
  * Lineage Traversal of Trees.
@@ -111,7 +111,7 @@
 //' }
 //' 
 //' // to enable generation of man-pages use Rcpp::export below (no spaces between :'s).
-//' [[Rcpp : : export]]
+//' [[Rcpp::export]]
 namespace SPLITT{
 
 

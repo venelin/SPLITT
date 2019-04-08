@@ -1,7 +1,7 @@
 # CreateRPackageFromTemplate.R
 # SPLITT
 # 
-# Copyright 2017 Venelin Mitov
+# Copyright 2017-2019 Venelin Mitov
 # 
 # This file is part of SPLITT: a generic C++ library for Serial and Parallel
 # Lineage Traversal of Trees.
