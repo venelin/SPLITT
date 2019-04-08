@@ -39,10 +39,17 @@ Used R-packages
 
 The SPLITT R-package uses the following 3rd party R-packages:
 
--   For calling C++ from R: Rcpp v1.0.0 (Eddelbuettel et al. 2018);
--   For tree processing in R: ape v5.2 (Paradis et al. 2018);
--   For cloning and manipulating git repositories: git2r v0.23.0 (Csardi et al. 2018);
--   For documentation and web-site generation: roxygen2 v6.1.1 (Wickham, Danenberg, and Eugster 2018), pkgdown v1.1.0.9000 (Wickham and Hesselberth 2018);
+-   For calling C++ from R: Rcpp v1.0.1 (Eddelbuettel et al. 2018);
+-   For tree processing in R: ape v5.3 (Paradis et al. 2018);
+-   For cloning and manipulating git repositories: git2r v0.25.2 (Csardi et al. 2018);
+-   For documentation and web-site generation: roxygen2 v6.1.1 (Wickham, Danenberg, and Eugster 2018), pkgdown v1.3.0 (Wickham and Hesselberth 2018);
+
+Licence and copyright
+=====================
+
+Copyright 2017-2019 Venelin Mitov
+
+Source code to SPLITT is made available under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at the user's option) any later version. PCMBase is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 References
 ==========
