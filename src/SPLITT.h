@@ -111,7 +111,7 @@
 //' }
 //' 
 //' // to enable generation of man-pages use Rcpp::export below (no spaces between :'s).
-//' [[Rcpp::export]]
+//' [[Rcpp : : export]]
 namespace SPLITT{
 
 
