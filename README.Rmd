@@ -106,7 +106,7 @@ The SPLITT R-package uses the following 3rd party R-packages:
 
 Copyright 2017-2019 Venelin Mitov
 
-Source code to SPLITT is made available under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at the user's option) any later version. PCMBase is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+Source code to SPLITT is made available under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at the user's option) any later version. SPLITT is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 # References
 

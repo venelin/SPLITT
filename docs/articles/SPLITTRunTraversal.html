@@ -36,7 +36,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">SPLITT</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.2</span>
       </span>
     </div>
 
@@ -138,16 +138,16 @@
 <h1 class="hasAnchor">
 <a href="#the-traversaltask-template-class" class="anchor"></a>The <code>TraversalTask</code> template class</h1>
 <p>Once defined, the <code>TraversalSpecification</code>-class is passed as a template argument to a <code>TraversalTask</code>. This is a template class, which is already written, so the only thing we do is to specify it for <em>our</em> <code>TraversalTask</code> using a <code>typedef</code> like the following one:</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">typedef</span> TraversalTask&lt; AbcPMM&lt;OrderedTree&lt;<span class="bu">std::</span>string, <span class="dt">double</span>&gt;&gt; &gt; ParallelPruningAbcPMM;</code></pre></div>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">typedef</span> TraversalTask&lt; AbcPMM&lt;OrderedTree&lt;std::string, <span class="dt">double</span>&gt;&gt; &gt; ParallelPruningAbcPMM;</code></pre>
 <p>The above code demonstrates one of the powers of C++ templates, namely to define complex types with a single line of code. To understand it, we could write an equivalent but more explicit code:</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">// use OrderedTree with string-nodes and double branch lengths</span>
-<span class="kw">typedef</span> OrderedTree&lt;<span class="bu">std::</span>string, <span class="dt">double</span>&gt; MyTreeType;
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">// use OrderedTree with string-nodes and double branch lengths</span>
+<span class="kw">typedef</span> OrderedTree&lt;std::string, <span class="dt">double</span>&gt; MyTreeType;
 
 <span class="co">// concretise our TraversalSpecification-class</span>
 <span class="kw">typedef</span> AbcPMM&lt;MyTreeType&gt; MyTraversalSpecificationType;
 
 <span class="co">// and the TraversalTask is:</span>
-<span class="kw">typedef</span> TraversalTask&lt; MyTraversalSpecificationType &gt; ParallelPruningAbcPMM;</code></pre></div>
+<span class="kw">typedef</span> TraversalTask&lt; MyTraversalSpecificationType &gt; ParallelPruningAbcPMM;</code></pre>
 </div>
 <div id="an-example-console-application" class="section level1">
 <h1 class="hasAnchor">
@@ -158,21 +158,21 @@
 <a href="#reading-the-input-tree" class="anchor"></a>Reading the input tree</h2>
 <p>We specify the input tree with the following format:</p>
 <ul>
-<li>The first line of input contains two integers: the number of nodes, <span class="math inline">\(M\)</span>, and the number of tips, <span class="math inline">\(N\)</span>;</li>
-<li>Each one of the next <span class="math inline">\(M-1\)</span> lines specifies one branch in the form of two words and a real number separated by spaces. The first word is the name of a daughter node, the second word is the name of its parent node, and the real number is the branch length.</li>
+<li>The first line of input contains two integers: the number of nodes, <span class="math">\(M\)</span>, and the number of tips, <span class="math">\(N\)</span>;</li>
+<li>Each one of the next <span class="math">\(M-1\)</span> lines specifies one branch in the form of two words and a real number separated by spaces. The first word is the name of a daughter node, the second word is the name of its parent node, and the real number is the branch length.</li>
 </ul>
 <p>Here is an example of an input:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">9</span> 5
-<span class="ex">bonobo</span> ancestor2 4.1
-<span class="ex">coalla</span> ancestor3 5
-<span class="ex">gorilla</span> ancestor1 2.8
-<span class="ex">dolfin</span> ancestor1 3
-<span class="ex">human</span> ancestor3 4
-<span class="ex">ancestor1</span> ancestor2 4.2
-<span class="ex">ancestor3</span> root 6
-<span class="ex">ancestor2</span> root 4.5</code></pre></div>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">9</span> 5
+<span class="kw">bonobo</span> ancestor2 4.1
+<span class="kw">coalla</span> ancestor3 5
+<span class="kw">gorilla</span> ancestor1 2.8
+<span class="kw">dolfin</span> ancestor1 3
+<span class="kw">human</span> ancestor3 4
+<span class="kw">ancestor1</span> ancestor2 4.2
+<span class="kw">ancestor3</span> root 6
+<span class="kw">ancestor2</span> root 4.5</code></pre>
 <p>Here is the C++ code for reading the tree in the above format from the standard input stream (<code>std::cin</code>):</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">using</span> <span class="kw">namespace</span> PMMUsingSPLITT;
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">using</span> <span class="kw">namespace</span> PMMUsingSPLITT;
 <span class="kw">using</span> <span class="kw">namespace</span> SPLITT;
 <span class="kw">using</span> <span class="kw">namespace</span> std;
 
@@ -182,7 +182,7 @@
   cout&lt;&lt;<span class="st">"Reading the input tree..."</span>&lt;&lt;endl;
   
   <span class="co">// Read the number of nodes and tips</span>
-  <span class="ex">uint</span> M, N;
+  <span class="dt">uint</span> M, N;
   cin&gt;&gt;M&gt;&gt;N;
   
   <span class="co">// read the tree</span>
@@ -191,36 +191,36 @@
   vec t(M<span class="dv">-1</span>);
   
   
-  <span class="cf">for</span>(<span class="dt">int</span> i=<span class="dv">0</span>; i &lt; M<span class="dv">-1</span>; i++) {
+  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Control">for</a></span>(<span class="dt">int</span> i=<span class="dv">0</span>; i &lt; M<span class="dv">-1</span>; i++) {
     cin&gt;&gt;daughters[i]&gt;&gt;parents[i]&gt;&gt;t[i];
   }
   
   <span class="co">// Other code discussed later on...</span>
-  <span class="cf">return</span> <span class="dv">0</span>
-}</code></pre></div>
+  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/function">return</a></span> <span class="dv">0</span>
+}</code></pre>
 <div id="a-note-on-other-tree-formats" class="section level3">
 <h3 class="hasAnchor">
 <a href="#a-note-on-other-tree-formats" class="anchor"></a>A note on other tree formats</h3>
 <p>At present SPLITT does not provide functions for parsing different tree formats. I did not need this functionality, because I was using another software to read my input trees and it was very easy to use that software to convert these trees to a list of branches as above. In particular, I’ve used the R-package ape, which can parse many tree-formats. For example, here is how one can specify the above example tree in newick format and parse it using ape:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ape)
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ape)
 newick_text &lt;-<span class="st"> "((bonobo:4.1,(gorilla:5,dolfin:3)ancestor1:4.2)ancestor2:4.5,(human:4,coalla:5)ancestor3:6)root;"</span>
-tree &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ape/topics/read.tree">read.tree</a></span>(<span class="dt">text =</span> newick_text)</code></pre></div>
+tree &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ape/topics/read.tree">read.tree</a></span>(<span class="dt">text =</span> newick_text)</code></pre>
 <p>Then, one can write the following R-function to print the branches of the tree as above:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">PrintBranches &lt;-<span class="st"> </span><span class="cf">function</span>(phy) {
-  M &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(phy<span class="op">$</span>edge.length) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
-  N &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(phy<span class="op">$</span>tip.label)
+<pre class="sourceCode r"><code class="sourceCode r">PrintBranches &lt;-<span class="st"> </span>function(phy) {
+  M &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(phy$edge.length) +<span class="st"> </span><span class="dv">1</span>
+  N &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(phy$tip.label)
   <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cat">cat</a></span>(M, <span class="st">" "</span>, N, <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)
-  <span class="cf">if</span>(<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NULL">is.null</a></span>(phy<span class="op">$</span>node.label)) {
-    labs &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(phy<span class="op">$</span>tip.label, phy<span class="op">$</span>node.label)
-  } <span class="cf">else</span> {
-    labs &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(phy<span class="op">$</span>tip.label, <span class="st">"root"</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"ancestor"</span>, <span class="dv">1</span><span class="op">:</span>(M <span class="op">-</span><span class="st"> </span>N <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)))
+  if(!<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NULL">is.null</a></span>(phy$node.label)) {
+    labs &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(phy$tip.label, phy$node.label)
+  } else {
+    labs &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(phy$tip.label, <span class="st">"root"</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"ancestor"</span>, <span class="dv">1</span>:(M -<span class="st"> </span>N -<span class="st"> </span><span class="dv">1</span>)))
   }
-  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>(M <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)) {
-    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cat">cat</a></span>(labs[phy<span class="op">$</span>edge[i, <span class="dv">2</span>]], <span class="st">" "</span>, labs[phy<span class="op">$</span>edge[i, <span class="dv">1</span>]], <span class="st">" "</span>, phy<span class="op">$</span>edge.length[i], <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)
+  for(i in <span class="dv">1</span>:(M -<span class="st"> </span><span class="dv">1</span>)) {
+    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cat">cat</a></span>(labs[phy$edge[i, <span class="dv">2</span>]], <span class="st">" "</span>, labs[phy$edge[i, <span class="dv">1</span>]], <span class="st">" "</span>, phy$edge.length[i], <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)
   }
 }
 
-<span class="kw">PrintBranches</span>(tree)</code></pre></div>
+<span class="kw">PrintBranches</span>(tree)</code></pre>
 <pre><code>## 9   5 
 ## ancestor2   root   4.5 
 ## bonobo   ancestor2   4.1 
@@ -231,17 +231,17 @@ tree &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocume
 ## human   ancestor3   4 
 ## coalla   ancestor3   5</code></pre>
 <p>Great that you are still reading! As a visual reward, here is how the example tree looks like (note that this tree does not reflect the true ancestral relationship between the mentioned species):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(tree)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/ape/topics/nodelabels">edgelabels</a></span>(<span class="dt">text =</span> tree<span class="op">$</span>edge.length)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/ape/topics/nodelabels">nodelabels</a></span>(<span class="dt">text=</span>tree<span class="op">$</span>node.label)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(tree)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/ape/topics/nodelabels">edgelabels</a></span>(<span class="dt">text =</span> tree$edge.length)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/ape/topics/nodelabels">nodelabels</a></span>(<span class="dt">text=</span>tree$node.label)</code></pre>
 <p><img src="SPLITTRunTraversal_files/figure-html/unnamed-chunk-7-1.png" width="576"></p>
 </div>
 </div>
 <div id="reading-the-trait-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#reading-the-trait-data" class="anchor"></a>Reading the trait data</h2>
-<p>After reading the tree, the next step is to read the trait-values associated with each of the <span class="math inline">\(N\)</span> tips in the tree. Each of the next <span class="math inline">\(N\)</span> lines contains a tip-name and the corresponding trait values separated by a space. Here is how we read this data in the C++ program:</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">using</span> <span class="kw">namespace</span> std;
+<p>After reading the tree, the next step is to read the trait-values associated with each of the <span class="math">\(N\)</span> tips in the tree. Each of the next <span class="math">\(N\)</span> lines contains a tip-name and the corresponding trait values separated by a space. Here is how we read this data in the C++ program:</p>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">using</span> <span class="kw">namespace</span> std;
 
 <span class="dt">int</span> main(<span class="dt">int</span> argc, <span class="dt">char</span>* argv[]) {
   <span class="co">// previously discussed code</span>
@@ -250,14 +250,14 @@ tree &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocume
   vector&lt;string&gt; tip_names(N);
   vec x(N);
   
-  <span class="cf">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; N; i++) {
+  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Control">for</a></span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; N; i++) {
     cin&gt;&gt;tip_names[i]&gt;&gt;x[i];
   }
   <span class="co">// other code discussed later</span>
-  <span class="cf">return</span> <span class="dv">0</span>;
-}</code></pre></div>
+  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/function">return</a></span> <span class="dv">0</span>;
+}</code></pre>
 <p>Then, we create a <code>ParallelPruningAbcPMM::DataType</code> object by calling its constructor. If you don’t remember how we defined <code>ParallelPruningAbcPMM::DataType</code>, just look back in the <a href="./SPLITTTraversalSpecification.html#datatype">Writing a traversal specification</a>-manual).</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">using</span> <span class="kw">namespace</span> std;
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">using</span> <span class="kw">namespace</span> std;
 
 <span class="dt">int</span> main(<span class="dt">int</span> argc, <span class="dt">char</span>* argv[]) {
   <span class="co">// previously discussed code</span>
@@ -266,8 +266,8 @@ tree &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocume
   <span class="kw">typename</span> ParallelPruningAbcPMM::DataType data(tip_names, x);
   
   <span class="co">// other code discussed later</span>
-  <span class="cf">return</span> <span class="dv">0</span>;
-}</code></pre></div>
+  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/function">return</a></span> <span class="dv">0</span>;
+}</code></pre>
 </div>
 <div id="creating-the-traversaltask-object" class="section level2">
 <h2 class="hasAnchor">
@@ -285,7 +285,7 @@ tree &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocume
 </ul>
 <p>Calling the <code>ParallelPruningAbcPMM</code> constructor triggers the creation of the internal objects of the framework, i.e. an <code>OrderedTree</code> object maintaining the order in which the nodes are processed and a <code>PreOrderTraversal</code> or a <code>PostOrderTraversal</code> object implementing different parallelization modes of the two traversal types.</p>
 <p>Here is how we construct the object in the example program:</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">using</span> <span class="kw">namespace</span> std;
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">using</span> <span class="kw">namespace</span> std;
 
 <span class="dt">int</span> main(<span class="dt">int</span> argc, <span class="dt">char</span>* argv[]) {
   <span class="co">// previously discussed code</span>
@@ -294,14 +294,14 @@ tree &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocume
   <span class="co">// AbcPMM objects in the memory.</span>
   ParallelPruningAbcPMM pruningTask(parents, daughters, t, data);
   <span class="co">// other code discussed later</span>
-  <span class="cf">return</span> <span class="dv">0</span>;
-}</code></pre></div>
+  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/function">return</a></span> <span class="dv">0</span>;
+}</code></pre>
 </div>
 <div id="the-main-loop" class="section level2">
 <h2 class="hasAnchor">
 <a href="#the-main-loop" class="anchor"></a>The main loop</h2>
-<p>In the main loop of the program, we read PMM-parameters <span class="math inline">\(\mathbf{\Theta}=&lt;g_{M}, \sigma, \sigma_{e}&gt;\)</span> from the standard input and calculate the PMM log-likelihood for these parameters and the input tree and data. To calculate the log-likelihood, first we call the <code>TraverseTree</code> method of our <code>pruningTask</code> object to calculate the coefficients <span class="math inline">\(a_{M}\)</span>, <span class="math inline">\(b_{M}\)</span> and <span class="math inline">\(c_{M}\)</span> for the parameters <span class="math inline">\(\sigma\)</span> and <span class="math inline">\(\sigma_{e}\)</span>, then we evaluate the log-likelihood value by applying the formula:</p>
-<p><span class="math display">\[\ell\ell(\mathbf{\Theta})=a_{M}g_{M}^2+b_{M}g_{M}+c_{M}\]</span>.</p>
+<p>In the main loop of the program, we read PMM-parameters <span class="math">\(\mathbf{\Theta}=&lt;g_{M}, \sigma, \sigma_{e}&gt;\)</span> from the standard input and calculate the PMM log-likelihood for these parameters and the input tree and data. To calculate the log-likelihood, first we call the <code>TraverseTree</code> method of our <code>pruningTask</code> object to calculate the coefficients <span class="math">\(a_{M}\)</span>, <span class="math">\(b_{M}\)</span> and <span class="math">\(c_{M}\)</span> for the parameters <span class="math">\(\sigma\)</span> and <span class="math">\(\sigma_{e}\)</span>, then we evaluate the log-likelihood value by applying the formula:</p>
+<p><span class="math">\[\ell\ell(\mathbf{\Theta})=a_{M}g_{M}^2+b_{M}g_{M}+c_{M}\]</span>.</p>
 <p>The <code>TraverseTree</code> method has two arguments:</p>
 <ul>
 <li>
@@ -310,7 +310,7 @@ tree &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocume
 <code>mode</code> - this is an <code>uint</code> specifying the whether SPLITT should performe the traversal using multiple cores and what parallelization order should be applied. This is a more technical topic covered in a <a href="./SPLITTTraversalModes.html">separate guide</a>. For now, it is sufficient to know that specifying <code>0</code> for this value tells SPLITT to run in mode <code>AUTO</code>. In this mode, SPLITT will try several modes during the first several <code>TraverseTree</code> calls and will stick to the one that resulted in fastest execution for the remaining executions. In the ideal use-case, the <code>TraversalTask</code>’s <code>TraverseTree()</code> method will be called repeatedly, varying the model parameters, the input data and branch lengths on a fixed tree topology. This encompasses all scenarios where a model is fitted to a fixed tree and data, e.g. ML or Bayesian PCM inference.</li>
 </ul>
 <p>Here is the corresponding C++ code for reading the main loop:</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">using</span> <span class="kw">namespace</span> std;
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">using</span> <span class="kw">namespace</span> std;
 
 <span class="dt">int</span> main(<span class="dt">int</span> argc, <span class="dt">char</span>* argv[]) {
   <span class="co">// previously discussed code</span>
@@ -321,52 +321,52 @@ tree &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocume
   
   cout&lt;&lt;<span class="st">"Main loop..."</span>&lt;&lt;endl;
   <span class="co">// run this loop as long as parameters can be read from the standard input</span>
-  <span class="cf">while</span>( cin&gt;&gt;gM&gt;&gt;sigma&gt;&gt;sigmae ) {
+  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Control">while</a></span>( cin&gt;&gt;gM&gt;&gt;sigma&gt;&gt;sigmae ) {
     param[<span class="dv">0</span>] = sigma*sigma;
     param[<span class="dv">1</span>] = sigmae*sigmae;
   
-    cout&lt;&lt;<span class="st">"  Calculating a, b, c at the root for sigma="</span>&lt;&lt;sigma&lt;&lt;<span class="st">" and sigmae="</span>&lt;&lt;sigmae&lt;&lt;<span class="bu">std::</span>endl;
+    cout&lt;&lt;<span class="st">"  Calculating a, b, c at the root for sigma="</span>&lt;&lt;sigma&lt;&lt;<span class="st">" and sigmae="</span>&lt;&lt;sigmae&lt;&lt;std::endl;
     
     vec abc = pruningTask.TraverseTree(param, <span class="dv">0</span>);
     
-    cout&lt;&lt;<span class="st">"  a="</span>&lt;&lt;abc[<span class="dv">0</span>]&lt;&lt;<span class="st">", b="</span>&lt;&lt;abc[<span class="dv">1</span>]&lt;&lt;<span class="st">", c="</span>&lt;&lt;abc[<span class="dv">2</span>]&lt;&lt;<span class="bu">std::</span>endl;
+    cout&lt;&lt;<span class="st">"  a="</span>&lt;&lt;abc[<span class="dv">0</span>]&lt;&lt;<span class="st">", b="</span>&lt;&lt;abc[<span class="dv">1</span>]&lt;&lt;<span class="st">", c="</span>&lt;&lt;abc[<span class="dv">2</span>]&lt;&lt;std::endl;
     
     <span class="dt">double</span> LL = abc[<span class="dv">0</span>]*gM*gM + abc[<span class="dv">1</span>]*gM + abc[<span class="dv">2</span>];
     cout&lt;&lt;<span class="st">"  LL(gM="</span>&lt;&lt;gM&lt;&lt;<span class="st">", sigma="</span>&lt;&lt;sigma&lt;&lt;<span class="st">", sigmae="</span>&lt;&lt;sigmae&lt;&lt;<span class="st">"): "</span>&lt;&lt;LL&lt;&lt;endl;
   } 
   cout&lt;&lt;<span class="st">"Main loop done."</span>&lt;&lt;endl;
 
-  <span class="bu">std::</span>cout&lt;&lt;<span class="st">"Good bye!"</span>&lt;&lt;<span class="bu">std::</span>endl;
-  <span class="cf">return</span> <span class="dv">0</span>;
-}</code></pre></div>
+  std::cout&lt;&lt;<span class="st">"Good bye!"</span>&lt;&lt;std::endl;
+  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/function">return</a></span> <span class="dv">0</span>;
+}</code></pre>
 </div>
 <div id="compiling-the-program" class="section level2">
 <h2 class="hasAnchor">
 <a href="#compiling-the-program" class="anchor"></a>Compiling the program</h2>
 <p>To compile the program we execute the following command from the directory PMMUsingSPLITT-console-app:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># Feel free to replace the name of the executable with your C++ compiler</span>
-<span class="fu">clang</span>++ -Wall -O2 -fopenmp -stdlib=libc++ -L/usr/local/lib -L/Library/Frameworks/R.framework/Resources/lib -o PMMLogLikelihood PMMLogLikelihood.cpp</code></pre></div>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># Feel free to replace the name of the executable with your C++ compiler</span>
+<span class="kw">clang++</span> -Wall -O2 -fopenmp -stdlib=libc++ -L/usr/local/lib -L/Library/Frameworks/R.framework/Resources/lib -o PMMLogLikelihood PMMLogLikelihood.cpp</code></pre>
 <p>This will compile and link the file PMMLogLikelihood.cpp into an executable file called “PMMLogLikelihood”. If the compilation runs fine you should see no error messages.</p>
 </div>
 <div id="testing-the-program" class="section level2">
 <h2 class="hasAnchor">
 <a href="#testing-the-program" class="anchor"></a>Testing the program</h2>
 <p>If the compilation was successful, type the following command.</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./PMMLogLikelihood</span> <span class="op">&lt;</span>input.txt</code></pre></div>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">./PMMLogLikelihood</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Comparison">&lt;</a></span>input.txt</code></pre>
 <p>With the exceptino of the line starting with <code>"OpenMP-version:"</code>, the above command should produce the following output:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">Hello</span> from the SPLITT PMM example!
-<span class="ex">Reading</span> the input tree...
-<span class="ex">Reading</span> the trait data...
-<span class="ex">OpenMP-version</span>: 201107
-<span class="ex">Main</span> loop...
-  <span class="ex">Calculating</span> a, b, c at the root for sigma=0.5 and sigmae=1
-  <span class="va">a=</span>-0.432535, <span class="va">b=</span>0.630659, <span class="va">c=</span>-8.21595
-  <span class="ex">LL</span>(gM=0.1, sigma=0.5, sigmae=1)<span class="bu">:</span> -8.15721
-  <span class="ex">Calculating</span> a, b, c at the root for sigma=0.8 and sigmae=0.4
-  <span class="va">a=</span>-0.205491, <span class="va">b=</span>0.285864, <span class="va">c=</span>-9.09873
-  <span class="ex">LL</span>(gM=1.5, sigma=0.8, sigmae=0.4)<span class="bu">:</span> -9.13229
-<span class="ex">Main</span> loop done.
-<span class="ex">Good</span> bye!</code></pre></div>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">Hello</span> from the SPLITT PMM example!
+<span class="kw">Reading</span> the input tree...
+<span class="kw">Reading</span> the trait data...
+<span class="kw">OpenMP-version</span>: 201107
+<span class="kw">Main</span> loop...
+  <span class="kw">Calculating</span> a, b, c at the root for sigma=0.5 and sigmae=1
+  <span class="ot">a=</span>-0.432535, <span class="ot">b=</span>0.630659, <span class="ot">c=</span>-8.21595
+  <span class="kw">LL</span>(gM=0.1, sigma=0.5, sigmae=1)<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Colon">:</a></span> -8.15721
+  <span class="kw">Calculating</span> a, b, c at the root for sigma=0.8 and sigmae=0.4
+  <span class="ot">a=</span>-0.205491, <span class="ot">b=</span>0.285864, <span class="ot">c=</span>-9.09873
+  <span class="kw">LL</span>(gM=1.5, sigma=0.8, sigmae=0.4)<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Colon">:</a></span> -9.13229
+<span class="kw">Main</span> loop done.
+<span class="kw">Good</span> bye!</code></pre>
 <p>If the OpenMP-version is equal to 0, then, most likely your compiler does not support OpenMP and the header “omp.h” was not available during compilation. If the OpenMP-version was a different number, then your compiler has an other Open MP version in it. If there have been other differences, e.g. the reported values for a, b and c are different, then there could be a problem, which I am not aware of. Please, report this in the <a href="https://github.com/venelin/SPLITT/issues">SPLITT issues list</a>.</p>
 </div>
 </div>

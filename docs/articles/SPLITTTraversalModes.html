@@ -36,7 +36,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">SPLITT</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.2</span>
       </span>
     </div>
 
@@ -137,7 +137,7 @@
 <a href="#prune-ranges" class="anchor"></a>Prune ranges</h1>
 <p>To maximize the potential for parallel execution SPLITT divides the node-states during a tree traversal into a <code>InitNode</code>, a <code>VisitNode</code>, and a <code>PruneNode</code> operation (see the <a href="./SPLITTTraversalSpecification.html">Writing a travefsal specification guide</a> for a description). Further, SPLITT rearranges the node-ids (and, hence the data) associated with the nodes in the computer memory, so that the <code>InitNode</code> and the <code>VisitNode</code> operations can be performed on ranges of consecutive node-ids. Performing these operations on a range of consecutive addresses in the memory has a potential to increase the efficiency of computation, because modern CPUs provide vectorized instruction sets, i.e. low-level processor instructions, such as (addition and multiplication) that can be executed simultaneously on a group of 2, 4 or more consecutive words in the memory. Another benefit from ordering the operations over such ranges is that the data associated with these nodes will tend to be less fragmented and, therefore, it will be found more often in the processor cache.</p>
 <p>To orchstrate this process SPLITT divides the traversal in a number of phases. The diagram below is an example in which the traversal of a tree is divided into an Initialization phase and four consecutive phases called “prune-ranges”:</p>
-<p><img src="figures/PruneRanges.png"><!-- --></p>
+<p><img src="figures/PruneRanges.png" width="380"></p>
 <p>In each phase, full nodes in green denote parallelizable executed <code>InitNode</code>-operations, full nodes in red denote parallelizable <code>VisitNode</code> operations and full nodes in blue denote parallelizable <code>PruneNode</code> operations.</p>
 <p>In general, there is no arrangement of the nodes in the memory, in which both, the <code>VisitNode</code> and the <code>PruneNode</code> operations will be executed on ranges of consecutive nodes. For example, the range of daughter-nodes 1, 2, 3 corresponds to the parent nodes 6, 8 and 7. In a bigger tree, the parents could well be nodes 6, 25, 12 or any other non-consecutive ids. Thus, the efficiency of the calculation can, in principle, be affected by the order in which the ranges of <code>VisitNode</code>- and <code>PruneNode</code>-operations are processed. SPLITT provides several possible arrangements (called “orders” or “parallel models”) of the execution cycle of these operations, which are all equivalent with respect to the result of the calculation, but may have different parallel efficiency, depending on the tree and the application-specific traversal operations.</p>
 </div>

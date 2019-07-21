@@ -36,7 +36,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">SPLITT</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.2</span>
       </span>
     </div>
 
@@ -165,15 +165,15 @@
 <div id="the-pmm-log-likelihood-example" class="section level1">
 <h1 class="hasAnchor">
 <a href="#the-pmm-log-likelihood-example" class="anchor"></a>The PMM log-likelihood example</h1>
-<p>This document is a step-by-step guide based on the example of the PMM log-likelihood calculation described in <a href="https://www.biorxiv.org/content/early/2018/10/29/235739">this article</a>. You don’t need to understand the term <em>PMM log-likelihood</em> to read the sections below. Rather, think of it as a mathematical function that is evaluated for a combination of model parameters, <span class="math inline">\(\mathbf{\Theta}=&lt;g_{M},\sigma,\sigma_{e}&gt;\)</span>, and for a given data consisting of a tree and numerical trait values assigned to its tips. The PMM log-likelihood is expressed as the following quadratic polynomial function of <span class="math inline">\(g_{M}\)</span>:</p>
-<p><span class="math display">\[\ell\ell(\mathbf{\Theta})=a_{M}g_{M}^2+b_{M}g_{M}+c_{M}\]</span></p>
-<p>We apply post-order traversal to calculate the coefficients <span class="math inline">\(a_{M}\)</span>, <span class="math inline">\(b_{M}\)</span> and <span class="math inline">\(c_{M}\)</span>. This procedure is illustrated on Fig. 1 in <a href="https://www.biorxiv.org/content/early/2018/10/29/235739">the article</a>.</p>
+<p>This document is a step-by-step guide based on the example of the PMM log-likelihood calculation described in <a href="https://www.biorxiv.org/content/early/2018/10/29/235739">this article</a>. You don’t need to understand the term <em>PMM log-likelihood</em> to read the sections below. Rather, think of it as a mathematical function that is evaluated for a combination of model parameters, <span class="math">\(\mathbf{\Theta}=&lt;g_{M},\sigma,\sigma_{e}&gt;\)</span>, and for a given data consisting of a tree and numerical trait values assigned to its tips. The PMM log-likelihood is expressed as the following quadratic polynomial function of <span class="math">\(g_{M}\)</span>:</p>
+<p><span class="math">\[\ell\ell(\mathbf{\Theta})=a_{M}g_{M}^2+b_{M}g_{M}+c_{M}\]</span></p>
+<p>We apply post-order traversal to calculate the coefficients <span class="math">\(a_{M}\)</span>, <span class="math">\(b_{M}\)</span> and <span class="math">\(c_{M}\)</span>. This procedure is illustrated on Fig. 1 in <a href="https://www.biorxiv.org/content/early/2018/10/29/235739">the article</a>.</p>
 </div>
 <div id="what-is-inside-a-traversalspecification-class" class="section level1">
 <h1 class="hasAnchor">
 <a href="#what-is-inside-a-traversalspecification-class" class="anchor"></a>What is inside a TraversalSpecification class?</h1>
 <p>A <code>TraversalSpecification</code> class is a C++ class that must have a number of members (i.e. <code>typedefs</code> and methods), in order to be applicable by SPLITT during a tree traversal procedure. Optionally, the class can inherit from the class <code>SPLITT::TraversalSpecification</code>. This, however is not required and not checked during compilation. The following C++ code shows how the class is defined for the PMM-example:</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
   <span class="co">// Calculates the quadratic polynomial coefficients a, b, c for the PMM log-likelihood.</span>
   <span class="kw">template</span>&lt;<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> Tree&gt;
   <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> AbcPMM: <span class="kw">public</span> TraversalSpecification&lt;Tree&gt; {
@@ -184,7 +184,7 @@
   <span class="co">// Methods</span>
   
   };
-} <span class="co">// </span><span class="re">END</span><span class="co"> namespace PMMUsingSPLITT</span></code></pre></div>
+} <span class="co">// END namespace PMMUsingSPLITT</span></code></pre>
 <p>The template-parameter <code>&lt;class Tree&gt;</code> allows to define <code>AbcPMM</code> classes for different <code>Tree</code>-types, e.g. for <code>Tree</code>s with nodes of type <code>int</code> as well as for <code>Tree</code>s with nodes of type <code>std::string</code>. SPLITT expects to find a number of members (<code>typedefs</code> and methods) in a <code>TraversalSpecification</code> class. We call the set of these members “the <code>TraversalSpecification</code>-<em>interface</em>”. In an object-oriented jargon, it would be more precise to call the class <code>AbcPMM</code> an <em>implementation</em> of the <code>TraversalSpecification</code>-<em>interface</em> or a <code>TraversalSpecification</code>-<em>implementation</em>. Because this is too long, below I use the term “the <code>TraversalSpecification</code>-<em>class</em>” whenever I mean <code>TraversalSpecification</code>-<em>implementation</em>, and I use <code>SPLITT::TraversalSpecification</code> whenever I mean the base-class.</p>
 <div id="members-inherited-from-the-base-class-splitttraversalspecification" class="section level2">
 <h2 class="hasAnchor">
@@ -195,23 +195,23 @@
 <li>a constructor receiving a reference to a <code>Tree</code>-object, which is assigned to <code>ref_tree_</code>;</li>
 <li>empty definitions of the three node-traversal operations (we will come to these later).</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
 
   <span class="co">// A recommended base-class for traversal-specifications</span>
   <span class="kw">template</span>&lt;<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> Tree&gt; <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> TraversalSpecification {
   <span class="kw">protected</span>:
     <span class="co">// A reference to a Tree available for inheriting classes</span>
-    Tree <span class="at">const</span>&amp; <span class="va">ref_tree_</span>;
+    Tree <span class="dt">const</span>&amp; ref_tree_;
     <span class="co">// A protected constructor that initializes the tree-reference. This constructor</span>
     <span class="co">// must be called explicitly in the initalization list of inheriting class constructors.</span>
-    TraversalSpecification(Tree <span class="at">const</span>&amp; tree): <span class="va">ref_tree_</span>(tree) {}
+    TraversalSpecification(Tree <span class="dt">const</span>&amp; tree): ref_tree_(tree) {}
   <span class="kw">public</span>:  
     <span class="co">// Node-traversal operations - to be overwritten by inheriting classes</span>
-    <span class="dt">void</span> InitNode(<span class="ex">uint</span> i) {}
-    <span class="dt">void</span> VisitNode(<span class="ex">uint</span> i) {}
-    <span class="dt">void</span> PruneNode(<span class="ex">uint</span> i, <span class="ex">uint</span> i_parent) {}
+    <span class="dt">void</span> InitNode(<span class="dt">uint</span> i) {}
+    <span class="dt">void</span> VisitNode(<span class="dt">uint</span> i) {}
+    <span class="dt">void</span> PruneNode(<span class="dt">uint</span> i, <span class="dt">uint</span> i_parent) {}
   };
-} <span class="co">// </span><span class="re">END</span><span class="co"> namespace PMMUsingSPLITT</span></code></pre></div>
+} <span class="co">// END namespace PMMUsingSPLITT</span></code></pre>
 </div>
 <div id="members-defined-in-the-traversalspecification-class" class="section level2">
 <h2 class="hasAnchor">
@@ -225,7 +225,7 @@
 <a href="#mytype" class="anchor"></a><code>MyType</code>
 </h4>
 <p>This is a synonym for the <code>TraversalSpecification</code>-class’s own type. Defining this is optional but saves some typing of long class names later on.</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
   <span class="co">// Calculates the quadratic polynomial coefficients a, b, c for the PMM log-likelihood.</span>
   <span class="kw">template</span>&lt;<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> Tree&gt;
   <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> AbcPMM: <span class="kw">public</span> TraversalSpecification&lt;Tree&gt; {
@@ -234,14 +234,14 @@
     <span class="kw">typedef</span> AbcPMM&lt;Tree&gt; MyType;
     <span class="co">//...</span>
   };
-} <span class="co">// </span><span class="re">END</span><span class="co"> namespace PMMUsingSPLITT</span></code></pre></div>
+} <span class="co">// END namespace PMMUsingSPLITT</span></code></pre>
 </div>
 <div id="basetype" class="section level4">
 <h4 class="hasAnchor">
 <a href="#basetype" class="anchor"></a><code>BaseType</code>
 </h4>
 <p>This is a synonym for the <code>TraversalSpecification</code>-class’s base-type. Also optional.</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
   <span class="co">// Calculates the quadratic polynomial coefficients a, b, c for the PMM log-likelihood.</span>
   <span class="kw">template</span>&lt;<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> Tree&gt;
   <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> AbcPMM: <span class="kw">public</span> TraversalSpecification&lt;Tree&gt; {
@@ -251,14 +251,14 @@
     <span class="kw">typedef</span> TraversalSpecification&lt;Tree&gt; BaseType;
     <span class="co">//...</span>
   };
-} <span class="co">// </span><span class="re">END</span><span class="co"> namespace PMMUsingSPLITT</span></code></pre></div>
+} <span class="co">// END namespace PMMUsingSPLITT</span></code></pre>
 </div>
 <div id="treetype" class="section level4">
 <h4 class="hasAnchor">
 <a href="#treetype" class="anchor"></a><code>TreeType</code>
 </h4>
 <p>Usually, this should be the class <code>SPLITT::OrderedTree</code> with specified template parameters for the type of node and branch-length in the tree. Because we want <code>AbcPMM</code> to be generic with respect to the node-type (i.e. <code>int</code> or <code>std::string</code> are possible such types), we postpone the specification, leaving <code>Tree</code> as a template parameter:</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
   <span class="co">// Calculates the quadratic polynomial coefficients a, b, c for the PMM log-likelihood.</span>
 <span class="kw">template</span>&lt;<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> Tree&gt;
   <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> AbcPMM: <span class="kw">public</span> TraversalSpecification&lt;Tree&gt; {
@@ -268,14 +268,14 @@
     <span class="kw">typedef</span> Tree TreeType;
     <span class="co">//...</span>
   };
-} <span class="co">// </span><span class="re">END</span><span class="co"> namespace PMMUsingSPLITT</span></code></pre></div>
+} <span class="co">// END namespace PMMUsingSPLITT</span></code></pre>
 </div>
 <div id="parametertype" class="section level4">
 <h4 class="hasAnchor">
 <a href="#parametertype" class="anchor"></a><code>ParameterType</code>
 </h4>
-<p>This is the type of parameter passed before each traversal. In the case of <code>AbcPMM</code>, these are the PMM parameters <span class="math inline">\(\sigma^2\)</span> and <span class="math inline">\(\sigma_{e}^2\)</span>. Since both of these parameters are real numbers, we specify that they are passed as a <code>std::vector&lt;double&gt;</code>. Below, <code>vec</code> is an alias for this type available in the SPLITT namespace:</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
+<p>This is the type of parameter passed before each traversal. In the case of <code>AbcPMM</code>, these are the PMM parameters <span class="math">\(\sigma^2\)</span> and <span class="math">\(\sigma_{e}^2\)</span>. Since both of these parameters are real numbers, we specify that they are passed as a <code>std::vector&lt;double&gt;</code>. Below, <code>vec</code> is an alias for this type available in the SPLITT namespace:</p>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
   <span class="co">// Calculates the quadratic polynomial coefficients a, b, c for the PMM log-likelihood.</span>
   <span class="kw">template</span>&lt;<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> Tree&gt;
   <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> AbcPMM: <span class="kw">public</span> TraversalSpecification&lt;Tree&gt; {
@@ -285,29 +285,29 @@
     <span class="kw">typedef</span> vec ParameterType; 
     <span class="co">//...</span>
   };
-} <span class="co">// </span><span class="re">END</span><span class="co"> namespace PMMUsingSPLITT</span></code></pre></div>
+} <span class="co">// END namespace PMMUsingSPLITT</span></code></pre>
 </div>
 <div id="datatype" class="section level4">
 <h4 class="hasAnchor">
 <a href="#datatype" class="anchor"></a><code>DataType</code>
 </h4>
 <p>This is the type of data associated with the tree object. While the parameters can be updated before each run of a tree traversal, the data is specified once at the time of constructing the <code>TraversalSpecification</code> object. In the case of the <code>AbcPMM</code> class the data represents a numeric trait measurement for each tip in the tree. Hence, it is an association map between tip-names and double values. We define this relationship in a separate class:</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
   <span class="co">// Calculates the quadratic polynomial coefficients a, b, c for the PMM log-likelihood.</span>
   <span class="kw">template</span>&lt;<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> NameType&gt;
   <span class="kw">struct</span> NumericTraitData {
     <span class="co">// use const references to avoid copying of long vectors</span>
     
     <span class="co">// The template parameter NameType should match the NodeType in the tree.</span>
-    <span class="bu">std::</span>vector&lt;NameType&gt; <span class="at">const</span>&amp; <span class="va">names_</span>;
-    vec <span class="at">const</span>&amp; <span class="va">x_</span>;
+    std::vector&lt;NameType&gt; <span class="dt">const</span>&amp; names_;
+    vec <span class="dt">const</span>&amp; x_;
     NumericTraitData(
-      <span class="bu">std::</span>vector&lt;NameType&gt; <span class="at">const</span>&amp; names,
-      vec <span class="at">const</span>&amp; x): <span class="va">names_</span>(names), <span class="va">x_</span>(x) {}
+      std::vector&lt;NameType&gt; <span class="dt">const</span>&amp; names,
+      vec <span class="dt">const</span>&amp; x): names_(names), x_(x) {}
   };
-} <span class="co">// </span><span class="re">END</span><span class="co"> namespace PMMUsingSPLITT</span></code></pre></div>
+} <span class="co">// END namespace PMMUsingSPLITT</span></code></pre>
 <p>Then, we define this class as the DataType in <code>AbcPMM</code> as follows:</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
   <span class="co">// Calculates the quadratic polynomial coefficients a, b, c for the PMM log-likelihood.</span>
   <span class="kw">template</span>&lt;<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> Tree&gt;
   <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> AbcPMM: <span class="kw">public</span> TraversalSpecification&lt;Tree&gt; {
@@ -317,14 +317,14 @@
     <span class="kw">typedef</span> NumericTraitData&lt;<span class="kw">typename</span> TreeType::NodeType&gt; DataType;
     <span class="co">//...</span>
   };
-} <span class="co">// </span><span class="re">END</span><span class="co"> namespace PMMUsingSPLITT</span></code></pre></div>
+} <span class="co">// END namespace PMMUsingSPLITT</span></code></pre>
 </div>
 <div id="statetype" class="section level4">
 <h4 class="hasAnchor">
 <a href="#statetype" class="anchor"></a><code>StateType</code>
 </h4>
-<p>This is the type of the state calculated for each node during the traversal. In the case of <code>AbcPMM</code>, these are the polynomial coefficients <span class="math inline">\(a_{i}\)</span>, <span class="math inline">\(b_{i}\)</span> and <span class="math inline">\(c_{i}\)</span> for a node <span class="math inline">\(i\)</span> in the tree. SPLITT uses this type as a return type for the <code>TraverseTree()</code> method in <code>TraversalAlgorithm</code> classes. Again we use <code>SPLITT::vec</code>. Note though, that for the implementation of the node-traversal operations in the <code>AbcPMM</code>-class it will be more convenient to store the states in separate vectors <code>a</code>, <code>b</code> and <code>c</code> (more on that later).</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
+<p>This is the type of the state calculated for each node during the traversal. In the case of <code>AbcPMM</code>, these are the polynomial coefficients <span class="math">\(a_{i}\)</span>, <span class="math">\(b_{i}\)</span> and <span class="math">\(c_{i}\)</span> for a node <span class="math">\(i\)</span> in the tree. SPLITT uses this type as a return type for the <code>TraverseTree()</code> method in <code>TraversalAlgorithm</code> classes. Again we use <code>SPLITT::vec</code>. Note though, that for the implementation of the node-traversal operations in the <code>AbcPMM</code>-class it will be more convenient to store the states in separate vectors <code>a</code>, <code>b</code> and <code>c</code> (more on that later).</p>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
   <span class="co">// Calculates the quadratic polynomial coefficients a, b, c for the PMM log-likelihood.</span>
   <span class="kw">template</span>&lt;<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> Tree&gt;
   <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> AbcPMM: <span class="kw">public</span> TraversalSpecification&lt;Tree&gt; {
@@ -334,14 +334,14 @@
     <span class="kw">typedef</span> vec StateType; 
     <span class="co">//...</span>
   };
-} <span class="co">// </span><span class="re">END</span><span class="co"> namespace PMMUsingSPLITT</span></code></pre></div>
+} <span class="co">// END namespace PMMUsingSPLITT</span></code></pre>
 </div>
 <div id="algorithmtype" class="section level4">
 <h4 class="hasAnchor">
 <a href="#algorithmtype" class="anchor"></a><code>AlgorithmType</code>
 </h4>
 <p>This is the type of the travefsal algorithm we want - either <code>PostOrderTraversal</code> or <code>PreOrderTraversal</code>:</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
   <span class="co">// Calculates the quadratic polynomial coefficients a, b, c for the PMM log-likelihood.</span>
   <span class="kw">template</span>&lt;<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> Tree&gt;
   <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> AbcPMM: <span class="kw">public</span> TraversalSpecification&lt;Tree&gt; {
@@ -351,14 +351,14 @@
     <span class="kw">typedef</span> PostOrderTraversal&lt;MyType&gt; AlgorithmType;
     <span class="co">//...</span>
   };
-} <span class="co">// </span><span class="re">END</span><span class="co"> namespace PMMUsingSPLITT</span></code></pre></div>
+} <span class="co">// END namespace PMMUsingSPLITT</span></code></pre>
 </div>
 </div>
 <div id="internal-data-fields" class="section level3">
 <h3 class="hasAnchor">
 <a href="#internal-data-fields" class="anchor"></a>Internal data fields</h3>
 <p>SPLITT does not impose any requirement on the internal data fields in the <code>TraversalSpecification</code>-class. These are all application-specific variables needed for the execution of the node-traversal operations. In the case of <code>AbcPMM</code>, these internal fields are defined as follows:</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
   <span class="co">// Calculates the quadratic polynomial coefficients a, b, c for the PMM log-likelihood.</span>
   <span class="kw">template</span>&lt;<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> Tree&gt;
   <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> AbcPMM: <span class="kw">public</span> TraversalSpecification&lt;Tree&gt; {
@@ -377,7 +377,7 @@
     vec a, b, c;
     <span class="co">//...</span>
   };
-} <span class="co">// </span><span class="re">END</span><span class="co"> namespace PMMUsingSPLITT</span></code></pre></div>
+} <span class="co">// END namespace PMMUsingSPLITT</span></code></pre>
 </div>
 <div id="constructor" class="section level3">
 <h3 class="hasAnchor">
@@ -388,7 +388,7 @@
 <li>a <code>const</code> reference to a <code>DataType</code> object;</li>
 </ul>
 <p>Here is how the constructor is defined for the <code>AbcPMM</code> class:</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
   <span class="co">// Calculates the quadratic polynomial coefficients a, b, c for the PMM log-likelihood.</span>
   <span class="kw">template</span>&lt;<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> Tree&gt;
   <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> AbcPMM: <span class="kw">public</span> TraversalSpecification&lt;Tree&gt; {
@@ -396,30 +396,30 @@
     <span class="co">// Typedefs</span>
     <span class="co">// Internal data-fields</span>
     <span class="co">// Constructor</span>
-    AbcPMM(TreeType <span class="at">const</span>&amp; tree, DataType <span class="at">const</span>&amp; input_data):
+    AbcPMM(TreeType <span class="dt">const</span>&amp; tree, DataType <span class="dt">const</span>&amp; input_data):
       BaseType(tree) {
       
       <span class="co">// Check that the number of data-points matches the number of tips in the tree.</span>
-      <span class="cf">if</span>(input_data.<span class="va">x_</span>.size() != <span class="kw">this</span>-&gt;<span class="va">ref_tree_</span>.num_tips()) {
-        <span class="bu">std::</span>ostringstream oss;
+      <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Control">if</a></span>(input_data.x_.size() != <span class="kw">this</span>-&gt;ref_tree_.num_tips()) {
+        std::ostringstream oss;
         oss&lt;&lt;<span class="st">"The vector x must be the same length as the number of tips ("</span>&lt;&lt;
-          <span class="kw">this</span>-&gt;<span class="va">ref_tree_</span>.num_tips()&lt;&lt;<span class="st">"), but were"</span>&lt;&lt;input_data.<span class="va">x_</span>.size()&lt;&lt;<span class="st">"."</span>;
-        <span class="cf">throw</span> <span class="bu">std::</span>invalid_argument(oss.str());
-      } <span class="cf">else</span> {
+          <span class="kw">this</span>-&gt;ref_tree_.num_tips()&lt;&lt;<span class="st">"), but were"</span>&lt;&lt;input_data.x_.size()&lt;&lt;<span class="st">"."</span>;
+        <span class="kw">throw</span> std::invalid_argument(oss.str());
+      } <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Control">else</a></span> {
         
         <span class="co">// IMPORTANT: reorder the data points according to the order in the tree object. </span>
-        uvec ordNodes = <span class="kw">this</span>-&gt;<span class="va">ref_tree_</span>.OrderNodes(input_data.<span class="va">names_</span>);
-        <span class="kw">this</span>-&gt;x = At(input_data.<span class="va">x_</span>, ordNodes);
+        uvec ordNodes = <span class="kw">this</span>-&gt;ref_tree_.OrderNodes(input_data.names_);
+        <span class="kw">this</span>-&gt;x = At(input_data.x_, ordNodes);
         
         <span class="co">// a[i] corresponds to the</span>
-        <span class="kw">this</span>-&gt;a = vec(<span class="kw">this</span>-&gt;<span class="va">ref_tree_</span>.num_nodes());
-        <span class="kw">this</span>-&gt;b = vec(<span class="kw">this</span>-&gt;<span class="va">ref_tree_</span>.num_nodes());
-        <span class="kw">this</span>-&gt;c = vec(<span class="kw">this</span>-&gt;<span class="va">ref_tree_</span>.num_nodes());
+        <span class="kw">this</span>-&gt;a = vec(<span class="kw">this</span>-&gt;ref_tree_.num_nodes());
+        <span class="kw">this</span>-&gt;b = vec(<span class="kw">this</span>-&gt;ref_tree_.num_nodes());
+        <span class="kw">this</span>-&gt;c = vec(<span class="kw">this</span>-&gt;ref_tree_.num_nodes());
       }
     }
     <span class="co">//...</span>
   };
-} <span class="co">// </span><span class="re">END</span><span class="co"> namespace PMMUsingSPLITT</span></code></pre></div>
+} <span class="co">// END namespace PMMUsingSPLITT</span></code></pre>
 </div>
 <div id="methods" class="section level3">
 <h3 class="hasAnchor">
@@ -429,8 +429,8 @@
 <h4 class="hasAnchor">
 <a href="#void-setparameterparametertype-const-par" class="anchor"></a><code>void SetParameter(ParameterType const&amp; par)</code>
 </h4>
-<p>This method is called before each traversal to set the values of the parameters. For the <code>AbcPMM</code> class, only <span class="math inline">\(\sigma^2\)</span> and <span class="math inline">\(\sigma_{e}^2\)</span> are needed to calculate the coefficients <span class="math inline">\(a_{M}\)</span>, <span class="math inline">\(b_{M}\)</span> and <span class="math inline">\(c_{M}\)</span>. Hence we define the method as follows:</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
+<p>This method is called before each traversal to set the values of the parameters. For the <code>AbcPMM</code> class, only <span class="math">\(\sigma^2\)</span> and <span class="math">\(\sigma_{e}^2\)</span> are needed to calculate the coefficients <span class="math">\(a_{M}\)</span>, <span class="math">\(b_{M}\)</span> and <span class="math">\(c_{M}\)</span>. Hence we define the method as follows:</p>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
   <span class="co">// Calculates the quadratic polynomial coefficients a, b, c for the PMM log-likelihood.</span>
   <span class="kw">template</span>&lt;<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> Tree&gt;
   <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> AbcPMM: <span class="kw">public</span> TraversalSpecification&lt;Tree&gt; {
@@ -439,28 +439,28 @@
     <span class="co">// Internal data-fields</span>
     <span class="co">// Constructor</span>
     <span class="co">// Methods</span>
-    <span class="dt">void</span> SetParameter(ParameterType <span class="at">const</span>&amp; par) {
-      <span class="cf">if</span>(par.size() != <span class="dv">2</span>) {
-        <span class="cf">throw</span> <span class="bu">std::</span>invalid_argument(
+    <span class="dt">void</span> SetParameter(ParameterType <span class="dt">const</span>&amp; par) {
+      <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Control">if</a></span>(par.size() != <span class="dv">2</span>) {
+        <span class="kw">throw</span> std::invalid_argument(
             <span class="st">"The par vector should be of length 2 with \</span>
-<span class="st">        elements corresponding to sigma2 and sigmae2."</span>);
+        elements corresponding to sigma2 <span class="kw">and</span> sigmae2.<span class="st">");</span>
       }
-      <span class="cf">if</span>(par[<span class="dv">0</span>] &lt;= <span class="dv">0</span> || par[<span class="dv">1</span>] &lt;= <span class="dv">0</span>) {
-        <span class="cf">throw</span> <span class="bu">std::</span>logic_error(<span class="st">"The parameters sigma2 and sigmae2 should be positive."</span>);
+      <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Control">if</a></span>(par[<span class="dv">0</span>] &lt;= <span class="dv">0</span> || par[<span class="dv">1</span>] &lt;= <span class="dv">0</span>) {
+        <span class="kw">throw</span> std::logic_error(<span class="st">"The parameters sigma2 and sigmae2 should be positive."</span>);
       }
       <span class="kw">this</span>-&gt;sigma2 = par[<span class="dv">0</span>];
       <span class="kw">this</span>-&gt;sigmae2 = par[<span class="dv">1</span>];
     }
     <span class="co">//...</span>
   };
-} <span class="co">// </span><span class="re">END</span><span class="co"> namespace PMMUsingSPLITT</span></code></pre></div>
+} <span class="co">// END namespace PMMUsingSPLITT</span></code></pre>
 </div>
 <div id="void-initnodeuint-i" class="section level4">
 <h4 class="hasAnchor">
 <a href="#void-initnodeuint-i" class="anchor"></a><code>void InitNode(uint i)</code>
 </h4>
 <p>This method is called on each node in the tree right after SetParameter and before any of the <code>VisitNode</code> and <code>PruneNode</code> methods has been called. There is no predefined order of the calls to InitNode and they may be executed in parallel for all nodes in the tree. Therefore, only node-specific data initialization, including the length of the branch leading to node i, can take place in this method. For the <code>AbcPMM</code> class, this is defined as follows (see also Fig. 1c in <a href="https://www.biorxiv.org/content/early/2018/10/29/235739">the article</a>):</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
   <span class="co">// Calculates the quadratic polynomial coefficients a, b, c for the PMM log-likelihood.</span>
   <span class="kw">template</span>&lt;<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> Tree&gt;
   <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> AbcPMM: <span class="kw">public</span> TraversalSpecification&lt;Tree&gt; {
@@ -470,26 +470,26 @@
     <span class="co">// Constructor</span>
     <span class="co">// Methods</span>
     <span class="co">//...</span>
-    <span class="kw">inline</span> <span class="dt">void</span> InitNode(<span class="ex">uint</span> i) {
+    <span class="kw">inline</span> <span class="dt">void</span> InitNode(<span class="dt">uint</span> i) {
       
-      <span class="cf">if</span>(i &lt; <span class="kw">this</span>-&gt;<span class="va">ref_tree_</span>.num_tips()) {
-        a[i] = <span class="dv">-0</span>.<span class="dv">5</span> / sigmae2;  
+      <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Control">if</a></span>(i &lt; <span class="kw">this</span>-&gt;ref_tree_.num_tips()) {
+        a[i] = <span class="fl">-0.</span><span class="dv">5</span> / sigmae2;  
         b[i] = x[i] / sigmae2;
-        c[i] = <span class="dv">-0</span>.<span class="dv">5</span> * (x[i]*b[i] + log(<span class="dv">2</span>*G_PI*sigmae2));
-      } <span class="cf">else</span> {
+        c[i] = <span class="fl">-0.</span><span class="dv">5</span> * (x[i]*b[i] + log(<span class="dv">2</span>*G_PI*sigmae2));
+      } <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Control">else</a></span> {
         a[i] = b[i] = c[i] = <span class="dv">0</span>;
       }
     }
     <span class="co">//...</span>
   };
-} <span class="co">// </span><span class="re">END</span><span class="co"> namespace PMMUsingSPLITT</span></code></pre></div>
+} <span class="co">// END namespace PMMUsingSPLITT</span></code></pre>
 </div>
 <div id="void-visitnodeuint-i" class="section level4">
 <h4 class="hasAnchor">
 <a href="#void-visitnodeuint-i" class="anchor"></a><code>void VisitNode(uint i)</code>
 </h4>
 <p>This method is called on each tip or internal node (EXCLUDING THE ROOT) in the tree after <code>PruneNode</code> has been called on each descendant of i (if in a post-order traversal) or after <code>VisitNode</code> has been called on the parent of i (if in a pre-order traversal). In a post-order traversal, the method is the perfect place to calculate the state of node i using the previously calculated states of its descendants. This method SHOULD NOT BE USED FOR ALTERING THE STATE of i’s parent, because this could enter in conflict with a concurrent execution of VisitNode on a sibling of i (see also <code>PruneNode</code> below). For the <code>AbcPMM</code> class, this is defined as follows:</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
   <span class="co">// Calculates the quadratic polynomial coefficients a, b, c for the PMM log-likelihood.</span>
   <span class="kw">template</span>&lt;<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> Tree&gt;
   <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> AbcPMM: <span class="kw">public</span> TraversalSpecification&lt;Tree&gt; {
@@ -499,25 +499,25 @@
     <span class="co">// Constructor</span>
     <span class="co">// Methods</span>
     <span class="co">//...</span>
-    <span class="kw">inline</span> <span class="dt">void</span> VisitNode(<span class="ex">uint</span> i) {
-      <span class="dt">double</span> t = <span class="kw">this</span>-&gt;<span class="va">ref_tree_</span>.LengthOfBranch(i);
+    <span class="kw">inline</span> <span class="dt">void</span> VisitNode(<span class="dt">uint</span> i) {
+      <span class="dt">double</span> t = <span class="kw">this</span>-&gt;ref_tree_.LengthOfBranch(i);
       <span class="dt">double</span> d = <span class="dv">1</span> - <span class="dv">2</span>*a[i]*sigma2*t;
       
       <span class="co">// the order is important here because for c[i] we use the previous values </span>
       <span class="co">// of a[i] and b[i].</span>
-      c[i] = c[i] - <span class="fl">0.5</span>*log(d) + <span class="fl">0.5</span>*b[i]*b[i]*sigma2*t/d;
+      c[i] = c[i] - <span class="fl">0.</span><span class="dv">5</span>*log(d) + <span class="fl">0.</span><span class="dv">5</span>*b[i]*b[i]*sigma2*t/d;
       a[i] /= d;
       b[i] /= d;
     }
     <span class="co">//...</span>
   };
-} <span class="co">// </span><span class="re">END</span><span class="co"> namespace PMMUsingSPLITT</span></code></pre></div>
+} <span class="co">// END namespace PMMUsingSPLITT</span></code></pre>
 </div>
 <div id="void-prunenodeuint-i-uint-j-post-order-traversal-only" class="section level4">
 <h4 class="hasAnchor">
 <a href="#void-prunenodeuint-i-uint-j-post-order-traversal-only" class="anchor"></a><code>void PruneNode(uint i, uint j)</code> (post-order traversal only)</h4>
 <p>This method is called on each tip or internal node (EXCLUDING THE ROOT) after <code>VisitNode(i)</code> and in sync with <code>PruneNode(k, i_parent)</code>, for any sibling k of i. Thus, it is safe to use <code>PruneNode</code> to update the state of i_parent. For the <code>AbcPMM</code> class, this is defined as follows:</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
   <span class="co">// Calculates the quadratic polynomial coefficients a, b, c for the PMM log-likelihood.</span>
   <span class="kw">template</span>&lt;<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> Tree&gt;
   <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> AbcPMM: <span class="kw">public</span> TraversalSpecification&lt;Tree&gt; {
@@ -527,20 +527,20 @@
     <span class="co">// Constructor</span>
     <span class="co">// Methods</span>
     <span class="co">//...</span>
-    <span class="kw">inline</span> <span class="dt">void</span> PruneNode(<span class="ex">uint</span> i, <span class="ex">uint</span> j) {
+    <span class="kw">inline</span> <span class="dt">void</span> PruneNode(<span class="dt">uint</span> i, <span class="dt">uint</span> j) {
       a[j] = a[j] + a[i];
       b[j] = b[j] + b[i];
       c[j] = c[j] + c[i];
     }
     <span class="co">//...</span>
   };
-} <span class="co">// </span><span class="re">END</span><span class="co"> namespace PMMUsingSPLITT</span></code></pre></div>
+} <span class="co">// END namespace PMMUsingSPLITT</span></code></pre>
 </div>
 <div id="statetype-stateatroot-const-post-order-traversal-only" class="section level4">
 <h4 class="hasAnchor">
 <a href="#statetype-stateatroot-const-post-order-traversal-only" class="anchor"></a><code>StateType StateAtRoot() const</code> (post-order traversal only)</h4>
 <p>This method is called after <code>PruneNode</code> has been called on each direct descendant of the root node, that is after the post-order traversal has been finished. If necessary, <code>VisitNode(i_root)</code> can be called here. For the <code>AbcPMM</code> class, this is defined as follows:</p>
-<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">namespace</span> PMMUsingSPLITT {
   <span class="co">// Calculates the quadratic polynomial coefficients a, b, c for the PMM log-likelihood.</span>
   <span class="kw">template</span>&lt;<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> Tree&gt;
   <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> AbcPMM: <span class="kw">public</span> TraversalSpecification&lt;Tree&gt; {
@@ -550,15 +550,15 @@
     <span class="co">// Constructor</span>
     <span class="co">// Methods</span>
     <span class="co">//...</span>
-    StateType StateAtRoot() <span class="at">const</span> {
+    StateType StateAtRoot() <span class="dt">const</span> {
       vec res(<span class="dv">3</span>);
-      res[<span class="dv">0</span>] = a[<span class="kw">this</span>-&gt;<span class="va">ref_tree_</span>.num_nodes() - <span class="dv">1</span>];
-      res[<span class="dv">1</span>] = b[<span class="kw">this</span>-&gt;<span class="va">ref_tree_</span>.num_nodes() - <span class="dv">1</span>];
-      res[<span class="dv">2</span>] = c[<span class="kw">this</span>-&gt;<span class="va">ref_tree_</span>.num_nodes() - <span class="dv">1</span>];
-      <span class="cf">return</span> res;
+      res[<span class="dv">0</span>] = a[<span class="kw">this</span>-&gt;ref_tree_.num_nodes() - <span class="dv">1</span>];
+      res[<span class="dv">1</span>] = b[<span class="kw">this</span>-&gt;ref_tree_.num_nodes() - <span class="dv">1</span>];
+      res[<span class="dv">2</span>] = c[<span class="kw">this</span>-&gt;ref_tree_.num_nodes() - <span class="dv">1</span>];
+      <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/function">return</a></span> res;
     };
   };
-} <span class="co">// </span><span class="re">END</span><span class="co"> namespace PMMUsingSPLITT</span></code></pre></div>
+} <span class="co">// END namespace PMMUsingSPLITT</span></code></pre>
 </div>
 </div>
 </div>
