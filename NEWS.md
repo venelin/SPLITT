@@ -1,3 +1,6 @@
+# SPLITT 1.2.3
+Added functions for error handling without throwing exceptions in TraversalSpecification class.
+
 # SPLITT 1.2.1 
 
 * Updated posterior quantile test scripts for newest version of POUMM R-package. 

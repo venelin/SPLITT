@@ -1,8 +1,8 @@
 Package: SPLITT
 Type: Package
 Title: A generic library for Serial and Parallel Lineage Traversal of Trees
-Version: 1.2.2
-Date: 2019-07-21
+Version: 1.2.3
+Date: 2020-03-23
 Authors@R: person("Venelin", "Mitov", email = "vmitov@gmail.com",
                  role = c("aut", "cre", "cph"))
 Description: SPLITT is a one-header-only generic C++ library for serial and
