@@ -47,12 +47,16 @@
 #define _PRAGMA_OMP_FOR_SIMD _Pragma("omp for simd")
 #define _PRAGMA_OMP_FOR _Pragma("omp for")
 #define _PRAGMA_OMP_SIMD _Pragma("omp simd")
+#define _PRAGMA_OMP_PARALLEL _Pragma("omp parallel")
+#define _PRAGMA_OMP_BARRIER _Pragma("omp barrier")
 
 #else // #if _OPENMP >= 201307
 
 #define _PRAGMA_OMP_FOR_SIMD _Pragma("omp for")
 #define _PRAGMA_OMP_FOR _Pragma("omp for")
 #define _PRAGMA_OMP_SIMD  /*_Pragma("omp simd")*/
+#define _PRAGMA_OMP_PARALLEL _Pragma("omp parallel")
+#define _PRAGMA_OMP_BARRIER _Pragma("omp barrier")
 
 #endif // _OPENMP >= 201307
 
@@ -60,13 +64,23 @@
 
 #else // #ifdef _OPENMP
 
-// the preprocessor directives should simply be ignored at compile-time
-#define _PRAGMA_OMP_FOR_SIMD _Pragma("omp for simd")
-#define _PRAGMA_OMP_FOR _Pragma("omp for")
-#define _PRAGMA_OMP_SIMD _Pragma("omp simd")
+// No OpenMP: expand to nothing (prevents -Wunknown-pragmas warnings)
+#define _PRAGMA_OMP_FOR_SIMD
+#define _PRAGMA_OMP_FOR
+#define _PRAGMA_OMP_SIMD
+#define _PRAGMA_OMP_PARALLEL
+#define _PRAGMA_OMP_BARRIER
 
 #endif // #ifdef _OPENMP
 
+// C++20: implicit capture of 'this' via '[=]' is deprecated.
+// Pre-C++20: explicitly capturing 'this' with 'SPLITT_CAPTURE_EQ_THIS' can be redundant and warned by GCC.
+// Use a conditional capture list to keep builds warning-free.
+#if defined(__cplusplus) && (__cplusplus >= 202002L)
+#define SPLITT_CAPTURE_EQ_THIS [=, this]
+#else
+#define SPLITT_CAPTURE_EQ_THIS [=]
+#endif
 
 //' @name SPLITT
 //' @title SPLITT: A generic C++ library for Serial and Parallel Lineage Traversal of Trees
@@ -1765,8 +1779,9 @@ public:
     uint i_parent = ref_tree_.FindIdOfParent(i);
     num_non_visited_children_[i_parent - ref_tree_.num_tips()]--;
     if(num_non_visited_children_[i_parent - ref_tree_.num_tips()] == 0) {
+    // All child nodes have been visited, so adding the parent to the queue.
       *it_queue_end = i_parent;
-      *it_queue_end++;
+      ++it_queue_end;
       has_a_new_node_.notify_one();
     }
   }
@@ -2052,14 +2067,14 @@ protected:
   void TraverseTreeSingleThreadLoopPostorder() {
     _PRAGMA_OMP_SIMD
     for(uint i = 0; i < ParentType::ref_tree_.num_nodes(); i++) {
-      exception_handler_.Run([=]{
+      exception_handler_.Run(SPLITT_CAPTURE_EQ_THIS{
         ParentType::ref_spec_.InitNode(i);
       });
     }
     exception_handler_.Rethrow();
 
     for(uint i = 0; i < ParentType::ref_tree_.num_nodes() - 1; i++) {
-      exception_handler_.Run([=]{
+      exception_handler_.Run(SPLITT_CAPTURE_EQ_THIS{
         ParentType::ref_spec_.VisitNode(i);
         ParentType::ref_spec_.PruneNode(i, ParentType::ref_tree_.FindIdOfParent(i));
       });
@@ -2070,7 +2085,7 @@ protected:
   void TraverseTreeSingleThreadLoopPrunes() {
     _PRAGMA_OMP_SIMD
     for(uint i = 0; i < ParentType::ref_tree_.num_nodes(); i++) {
-      exception_handler_.Run([=]{
+      exception_handler_.Run(SPLITT_CAPTURE_EQ_THIS{
         ParentType::ref_spec_.InitNode(i);
       });
     }
@@ -2083,7 +2098,7 @@ protected:
 
     _PRAGMA_OMP_SIMD
       for(uint i = range_prune[0]; i <= range_prune[1]; i++) {
-        exception_handler_.Run([=]{
+        exception_handler_.Run(SPLITT_CAPTURE_EQ_THIS{
           ParentType::ref_spec_.VisitNode(i);
           ParentType::ref_spec_.PruneNode(i, ParentType::ref_tree_.FindIdOfParent(i));
         });
@@ -2095,7 +2110,7 @@ protected:
   void TraverseTreeSingleThreadLoopVisits() {
     _PRAGMA_OMP_SIMD
     for(uint i = 0; i < ParentType::ref_tree_.num_nodes(); i++) {
-      exception_handler_.Run([=]{
+      exception_handler_.Run(SPLITT_CAPTURE_EQ_THIS{
         ParentType::ref_spec_.InitNode(i);
       });
     }
@@ -2105,7 +2120,7 @@ protected:
       auto range_visit = ParentType::ref_tree_.RangeIdVisitNode(i_level);
       _PRAGMA_OMP_SIMD
       for(uint i = range_visit[0]; i <= range_visit[1]; i++) {
-        exception_handler_.Run([=]{
+        exception_handler_.Run(SPLITT_CAPTURE_EQ_THIS{
           if(i < ParentType::ref_tree_.num_tips()) {
             // i is a tip (only Visit)
             ParentType::ref_spec_.VisitNode(i);
@@ -2128,12 +2143,11 @@ protected:
   }
 
   void TraverseTreeMultiThreadLoopVisitsThenLoopPrunes() {
-
-#pragma omp parallel
+_PRAGMA_OMP_PARALLEL
 {
   _PRAGMA_OMP_FOR_SIMD
   for(uint i = 0; i < ParentType::ref_tree_.num_nodes(); i++) {
-    exception_handler_.Run([=]{
+    exception_handler_.Run(SPLITT_CAPTURE_EQ_THIS{
       ParentType::ref_spec_.InitNode(i);  
     });
   }
@@ -2141,13 +2155,11 @@ protected:
 
   uint i_prune = 0;
   for(uint i_level = 0; i_level < ParentType::ref_tree_.num_levels(); i_level++) {
-
-#pragma omp barrier
-
+_PRAGMA_OMP_BARRIER
     auto range_visit = ParentType::ref_tree_.RangeIdVisitNode(i_level);
     _PRAGMA_OMP_FOR_SIMD
       for(uint i = range_visit[0]; i <= range_visit[1]; i++) {
-        exception_handler_.Run([=]{
+        exception_handler_.Run(SPLITT_CAPTURE_EQ_THIS{
           ParentType::ref_spec_.VisitNode(i);
         });
       }
@@ -2156,12 +2168,12 @@ protected:
       uint num_branches_done = 0;
 
     while(num_branches_done != range_visit[1] - range_visit[0] + 1) {
-#pragma omp barrier
+_PRAGMA_OMP_BARRIER
       auto range_prune = ParentType::ref_tree_.RangeIdPruneNode(i_prune);
 
       _PRAGMA_OMP_FOR_SIMD
         for(uint i = range_prune[0]; i <= range_prune[1]; i++) {
-          exception_handler_.Run([=]{
+          exception_handler_.Run(SPLITT_CAPTURE_EQ_THIS{
             ParentType::ref_spec_.PruneNode(i, ParentType::ref_tree_.FindIdOfParent(i));
           });
         }
@@ -2175,7 +2187,7 @@ protected:
   }
 
   void TraverseTreeMultiThreadLoopVisits() {
-#pragma omp parallel
+_PRAGMA_OMP_PARALLEL
 {
   uint tid;
 #ifdef _OPENMP
@@ -2184,9 +2196,11 @@ protected:
   tid = 0;
 #endif
 
+(void)tid;
+
   _PRAGMA_OMP_FOR_SIMD
     for(uint i = 0; i < ParentType::ref_tree_.num_nodes(); i++) {
-      exception_handler_.Run([=]{
+      exception_handler_.Run(SPLITT_CAPTURE_EQ_THIS{
         ParentType::ref_spec_.InitNode(i);
       });
     }
@@ -2196,7 +2210,7 @@ protected:
       auto range_visit = ParentType::ref_tree_.RangeIdVisitNode(i_level);
     _PRAGMA_OMP_FOR_SIMD
       for(uint i = range_visit[0]; i <= range_visit[1]; i++) {
-        exception_handler_.Run([=]{
+        exception_handler_.Run(SPLITT_CAPTURE_EQ_THIS{
           if(i < ParentType::ref_tree_.num_tips()) {
             // i is a tip (only Visit)
             ParentType::ref_spec_.VisitNode(i);
@@ -2220,9 +2234,9 @@ protected:
 
   void TraverseTreeMultiThreadVisitQueue() {
     ParentType::visit_queue_.Init(ParentType::num_children_);
-#pragma omp parallel
+_PRAGMA_OMP_PARALLEL
 {
-  exception_handler_.Run([=]{
+  exception_handler_.Run(SPLITT_CAPTURE_EQ_THIS{
     while(true) {
       uint i = ParentType::visit_queue_.NextInQueue();
       if(i == G_NA_UINT) {
@@ -2259,12 +2273,11 @@ exception_handler_.Rethrow();
 }
 
   void TraverseTreeMultiThreadLoopPrunes() {
-
-#pragma omp parallel
+_PRAGMA_OMP_PARALLEL
 {
   _PRAGMA_OMP_FOR_SIMD
   for(uint i = 0; i < ParentType::ref_tree_.num_nodes(); i++) {
-    exception_handler_.Run([=]{
+    exception_handler_.Run(SPLITT_CAPTURE_EQ_THIS{
       ParentType::ref_spec_.InitNode(i);
     });
   }
@@ -2275,7 +2288,7 @@ exception_handler_.Rethrow();
 
     _PRAGMA_OMP_FOR_SIMD
       for(uint i = range_prune[0]; i <= range_prune[1]; i++) {
-        exception_handler_.Run([=]{
+        exception_handler_.Run(SPLITT_CAPTURE_EQ_THIS{
           ParentType::ref_spec_.VisitNode(i);
           ParentType::ref_spec_.PruneNode(i, ParentType::ref_tree_.FindIdOfParent(i));
         });
@@ -2286,8 +2299,7 @@ exception_handler_.Rethrow();
   }
 
   void TraverseTreeMultiThreadLoopPrunesNoException() {
-    
-#pragma omp parallel
+    _PRAGMA_OMP_PARALLEL
 {
   _PRAGMA_OMP_FOR_SIMD
   for(uint i = 0; i < ParentType::ref_tree_.num_nodes(); i++) {
@@ -2308,7 +2320,7 @@ exception_handler_.Rethrow();
   
   void TraverseTreeHybridLoopVisitsThenLoopPrunes() {
     uint min_size_chunk_visit = this->min_size_chunk_visit();
-#pragma omp parallel
+_PRAGMA_OMP_PARALLEL
 {
   uint tid;
 #ifdef _OPENMP
@@ -2317,9 +2329,11 @@ exception_handler_.Rethrow();
   tid = 0;
 #endif
 
+(void)tid;
+
   _PRAGMA_OMP_FOR_SIMD
     for(uint i = 0; i < ParentType::ref_tree_.num_nodes(); i++) {
-      exception_handler_.Run([=]{
+      exception_handler_.Run(SPLITT_CAPTURE_EQ_THIS{
         ParentType::ref_spec_.InitNode(i);
       });
     }
@@ -2328,12 +2342,12 @@ exception_handler_.Rethrow();
     uint i_prune = 0;
   for(uint i_level = 0; i_level < ParentType::ref_tree_.num_levels(); i_level++) {
     auto range_visit = ParentType::ref_tree_.RangeIdVisitNode(i_level);
-#pragma omp barrier
+_PRAGMA_OMP_BARRIER
     if(range_visit[1] - range_visit[0] + 1 >
          ParentType::NumOmpThreads() * min_size_chunk_visit) {
       _PRAGMA_OMP_FOR_SIMD
         for(uint i = range_visit[0]; i <= range_visit[1]; i++) {
-          exception_handler_.Run([=]{
+          exception_handler_.Run(SPLITT_CAPTURE_EQ_THIS{
             ParentType::ref_spec_.VisitNode(i);
           });
         }
@@ -2342,7 +2356,7 @@ exception_handler_.Rethrow();
       // only the master thread executes this
       _PRAGMA_OMP_SIMD
       for(uint i = range_visit[0]; i <= range_visit[1]; i++) {
-        exception_handler_.Run([=]{
+        exception_handler_.Run(SPLITT_CAPTURE_EQ_THIS{
           ParentType::ref_spec_.VisitNode(i);
         });
       }
@@ -2356,7 +2370,7 @@ exception_handler_.Rethrow();
         auto range_prune = ParentType::ref_tree_.RangeIdPruneNode(i_prune);
         _PRAGMA_OMP_SIMD
           for(uint i = range_prune[0]; i <= range_prune[1]; i++) {
-            exception_handler_.Run([=]{
+            exception_handler_.Run(SPLITT_CAPTURE_EQ_THIS{
               ParentType::ref_spec_.PruneNode(i, ParentType::ref_tree_.FindIdOfParent(i));
             });
           }
@@ -2372,7 +2386,7 @@ exception_handler_.Rethrow();
 
   void TraverseTreeHybridLoopPrunes() {
     uint min_size_chunk_prune = this->min_size_chunk_prune();
-#pragma omp parallel
+_PRAGMA_OMP_PARALLEL
 {
   uint tid;
 #ifdef _OPENMP
@@ -2381,9 +2395,11 @@ exception_handler_.Rethrow();
   tid = 0;
 #endif
 
+(void)tid;
+
   _PRAGMA_OMP_FOR_SIMD
     for(uint i = 0; i < ParentType::ref_tree_.num_nodes(); i++) {
-      exception_handler_.Run([=]{
+      exception_handler_.Run(SPLITT_CAPTURE_EQ_THIS{
         ParentType::ref_spec_.InitNode(i);
       });
     }
@@ -2392,12 +2408,12 @@ exception_handler_.Rethrow();
 
   for(uint i_prune = 0; i_prune < ParentType::ref_tree_.num_parallel_ranges_prune(); i_prune++) {
       auto range_prune = ParentType::ref_tree_.RangeIdPruneNode(i_prune);
-#pragma omp barrier
+_PRAGMA_OMP_BARRIER
       if (range_prune[1] - range_prune[0] + 1 >
             ParentType::NumOmpThreads() * min_size_chunk_prune) {
         _PRAGMA_OMP_FOR_SIMD
         for(uint i = range_prune[0]; i <= range_prune[1]; i++) {
-          exception_handler_.Run([=]{
+          exception_handler_.Run(SPLITT_CAPTURE_EQ_THIS{
             ParentType::ref_spec_.VisitNode(i);
             ParentType::ref_spec_.PruneNode(i, ParentType::ref_tree_.FindIdOfParent(i));
           });
@@ -2407,7 +2423,7 @@ exception_handler_.Rethrow();
         // only one (master) thread executes this
         _PRAGMA_OMP_SIMD
         for(uint i = range_prune[0]; i <= range_prune[1]; i++) {
-          exception_handler_.Run([=]{
+          exception_handler_.Run(SPLITT_CAPTURE_EQ_THIS{
             ParentType::ref_spec_.VisitNode(i);
             ParentType::ref_spec_.PruneNode(i, ParentType::ref_tree_.FindIdOfParent(i));
           });
@@ -2420,7 +2436,7 @@ exception_handler_.Rethrow();
 
   void TraverseTreeHybridLoopVisits() {
     uint min_size_chunk_visit = this->min_size_chunk_visit();
-#pragma omp parallel
+_PRAGMA_OMP_PARALLEL
 {
   uint tid;
 #ifdef _OPENMP
@@ -2429,9 +2445,11 @@ exception_handler_.Rethrow();
   tid = 0;
 #endif
 
+(void)tid;
+
   _PRAGMA_OMP_FOR_SIMD
     for(uint i = 0; i < ParentType::ref_tree_.num_nodes(); i++) {
-      exception_handler_.Run([=]{
+      exception_handler_.Run(SPLITT_CAPTURE_EQ_THIS{
         ParentType::ref_spec_.InitNode(i);
       });
     }
@@ -2439,12 +2457,12 @@ exception_handler_.Rethrow();
 
   for(uint i_level = 0; i_level < ParentType::ref_tree_.num_levels(); i_level++) {
     auto range_visit = ParentType::ref_tree_.RangeIdVisitNode(i_level);
-#pragma omp barrier
+_PRAGMA_OMP_BARRIER
     if(range_visit[1] - range_visit[0] + 1 >
          ParentType::NumOmpThreads() * min_size_chunk_visit) {
       _PRAGMA_OMP_FOR_SIMD
       for(uint i = range_visit[0]; i <= range_visit[1]; i++) {
-        exception_handler_.Run([=]{
+        exception_handler_.Run(SPLITT_CAPTURE_EQ_THIS{
           if(i < ParentType::ref_tree_.num_tips()) {
             // i is a tip (only Visit)
             ParentType::ref_spec_.VisitNode(i);
@@ -2462,7 +2480,7 @@ exception_handler_.Rethrow();
       // only the master thread executes this
       _PRAGMA_OMP_SIMD
       for(uint i = range_visit[0]; i <= range_visit[1]; i++) {
-        exception_handler_.Run([=]{
+        exception_handler_.Run(SPLITT_CAPTURE_EQ_THIS{
           if(i < ParentType::ref_tree_.num_tips()) {
             // i is a tip (only Visit)
             ParentType::ref_spec_.VisitNode(i);
@@ -2481,7 +2499,7 @@ exception_handler_.Rethrow();
 }
     // VisitNode not called on the root
     for(uint j: ParentType::ref_tree_.FindChildren(ParentType::ref_tree_.num_nodes() - 1)) {
-      exception_handler_.Run([=]{
+      exception_handler_.Run(SPLITT_CAPTURE_EQ_THIS{
         ParentType::ref_spec_.PruneNode(j, ParentType::ref_tree_.num_nodes() - 1);
       });
     }
@@ -2635,7 +2653,7 @@ protected:
   }
 
   void TraverseTreeMultiThreadLoopVisits() {
-#pragma omp parallel
+_PRAGMA_OMP_PARALLEL
 {
   uint tid;
 #ifdef _OPENMP
@@ -2643,6 +2661,8 @@ protected:
 #else
   tid = 0;
 #endif
+
+(void)tid;
 
   _PRAGMA_OMP_FOR_SIMD
     for(uint i = 0; i < ParentType::ref_tree_.num_nodes(); i++) {
